@@ -4,15 +4,15 @@ This project analyzes the accuracy of Large Language Models (LLMs) in identifyin
 
 ## Model configuration
 The following models are used in this project. The models and their specification are accessible through the provided links:
-llama3: https://ollama.com/library/llama3:8b
-lamma3.1: https://ollama.com/library/llama3.1
-llama3.2 - Vision: https://ollama.com/library/llama3.2-vision
-mistral: https://ollama.com/library/mistral
-mistral-nemo: https://ollama.com/library/mistral-nemo
-mistral-small: https://ollama.com/library/mistral-small
-gemma: https://ollama.com/library/gemma
-gemma2: https://ollama.com/library/gemma2:27b
-gpt-4o mini: https://platform.openai.com/docs/models
+- **Llama 3:** https://ollama.com/library/llama3:8b
+- **Llama 3.1:** https://ollama.com/library/llama3.1
+- **Llama 3.2 - Vision:** https://ollama.com/library/llama3.2-vision
+- **Mistral:** https://ollama.com/library/mistral
+- **Mistral-Nemo:** https://ollama.com/library/mistral-nemo
+- **Mistral-Small:** https://ollama.com/library/mistral-small
+- **Gemma:** https://ollama.com/library/gemma
+- **Gemma 2:** https://ollama.com/library/gemma2:27b
+- **GPT-4o Mini:** https://platform.openai.com/docs/models
 
 
 ## Steps to Replicate
