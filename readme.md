@@ -2,6 +2,19 @@
 
 This project analyzes the accuracy of Large Language Models (LLMs) in identifying security-related requirements. Follow the steps below to replicate the results.
 
+## Model configuration
+The following models are used in this project. The models and their specification are accessible through the provided links:
+llama3: https://ollama.com/library/llama3:8b
+lamma3.1: https://ollama.com/library/llama3.1
+llama3.2 - Vision: https://ollama.com/library/llama3.2-vision
+mistral: https://ollama.com/library/mistral
+mistral-nemo: https://ollama.com/library/mistral-nemo
+mistral-small: https://ollama.com/library/mistral-small
+gemma: https://ollama.com/library/gemma
+gemma2: https://ollama.com/library/gemma2:27b
+gpt-4o mini: https://platform.openai.com/docs/models
+
+
 ## Steps to Replicate
 
 1. **Set Up the Environment**  
@@ -26,7 +39,8 @@ This project analyzes the accuracy of Large Language Models (LLMs) in identifyin
      - This script also contains a model list. Update it to specify which models you want to include in the metrics generation.
      - The generated DataFrames are passed to functions in the `source/data_analysis.py` file. Each function corresponds to one of the tables displayed in the results section.
 
-## Adding New Prompts
+## Prompt Design
+Prompts are generated in `source/prompt.py`. The factory injects each requirement into the specified strategy template and returns it as a user message.  
 
 To add new prompts:
 1. Add the template to the prompt factory in `source/prompt.py`.
