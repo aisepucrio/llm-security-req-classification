@@ -85,10 +85,10 @@ def classify_req(user_prompt, model, response_logs):
 
 if __name__ == '__main__':
     # define models to run
-    models = ['gemma', 'gemma2_27b', 'gpt-4o-mini', 'llama3', 'llama3.1', 'llama3.2-vision', 'mistral', 'mistral-nemo', 'mistral-small']
-
+    models = ['gemma', 'gemma2_27b', 'gpt-4o-mini', 'llama3', 'llama3.1', 'llama3.2-vision', 'mistral', 'mistral-nemo', 'mistral-small', 'deepseek-r1:14b']
 
     path = r'./ConsolidatedData/data.json'
+    path_extra_datasets = r'./ConsolidatedData/data_extra_datasets.json'
 
     for model in models:
         response_logs = []
@@ -98,7 +98,7 @@ if __name__ == '__main__':
             data = json.load(file)
 
         #change sample size for testing
-        sample_size = 4
+        sample_size = -1
         for i in tqdm(data[:sample_size]):
             req = i['requirement']
             for strategy in strategys:   
@@ -110,6 +110,32 @@ if __name__ == '__main__':
 
                 i['response'][strategy] = response
         
+                with open(output_path, 'w+') as file:
+                    json.dump(data[:sample_size], file, indent=4)
+
+                with open(response_logs_path, 'w+') as file:
+                    json.dump(response_logs, file, indent=4)
+
+    for model in models:
+        response_logs = []
+        response_logs_path = rf'./results/logs_extra_datasets/response_logs_{model.replace(":", "_")}.json'
+        output_path = rf'./results/{model.replace(":", "_")}_extra_datasets.json'
+        with open(path, 'r') as file:
+            data = json.load(file)
+
+        # change sample size for testing
+        sample_size = -1
+        for i in tqdm(data[:sample_size]):
+            req = i['requirement']
+            for strategy in strategys:
+                user_prompt = prompt_factory(strategy=strategy, requirement=req)['user_msg']
+                response = classify_req(user_prompt, model, response_logs)
+
+                if 'response' not in i:
+                    i['response'] = {}
+
+                i['response'][strategy] = response
+
                 with open(output_path, 'w+') as file:
                     json.dump(data[:sample_size], file, indent=4)
 

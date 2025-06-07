@@ -12,6 +12,7 @@ The following models are used in this project. The models and their specificatio
 - **Mistral-Small:** https://ollama.com/library/mistral-small
 - **Gemma:** https://ollama.com/library/gemma
 - **Gemma 2:** https://ollama.com/library/gemma2:27b
+- **DeepSeek-R1-Distill-Qwen-14B:** https://ollama.com/library/deepseek-r1
 - **GPT-4o Mini:** https://platform.openai.com/docs/models
 
 
@@ -37,6 +38,7 @@ The following models are used in this project. The models and their specificatio
 5. **Generate Metrics for Analysis**  
    - Run `source/results_metrics.py` to create the evaluation metrics used for analysis.
      - This script also contains a model list. Update it to specify which models you want to include in the metrics generation.
+     - If you want to generate reports for additional datasets (DOSSPREE and PROMISE+ are in this repository), alter the model list to include results files ended in _extra_datasets.json as needed. There is an example in the script.
      - The generated DataFrames are passed to functions in the `source/data_analysis.py` file. Each function corresponds to one of the tables displayed in the results section.
 
 ## Prompt Design
@@ -47,5 +49,3 @@ To add new prompts:
 2. Update the `strategies` list at the end of the file.
 
 ---
-
-If you have any questions, feel free to reach out at **murilodsmartin@gmail.com**.

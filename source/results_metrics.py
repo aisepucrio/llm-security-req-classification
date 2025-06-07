@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from prompt import strategys
 from data_analysis import rq1_eda, rq2_eda, rq2_best_improvement, rq2_improvement_by_strategy, rq3_individual,rq3_consolidated
-
+from numpy import nan
 
 
 def get_data(models):
@@ -97,7 +97,7 @@ def get_rq2_consolidated_result(labels, models ):
             df_temp = df_temp[df_temp['predicted_label'].isin(labels)]
             df_temp = df_temp.drop(columns=strategys)
             cm = confusion_matrix(df_temp['label'], df_temp['predicted_label'], labels=labels)
-            report = classification_report(df_temp['label'], df_temp['predicted_label'], labels=labels)
+            report = classification_report(df_temp['label'], df_temp['predicted_label'], labels=labels, zero_division=nan)
             df_aux = get_df_from_report(report)    
             df_aux['model'] = model 
             df_aux['strategy'] = strategy     
@@ -132,7 +132,7 @@ def get_rq3_individual_secreq_result(labels, models ):
                 df_temp = df_temp[df_temp['predicted_label'].isin(labels)]
                 df_temp = df_temp.drop(columns=strategys)
                 cm = confusion_matrix(df_temp['label'], df_temp['predicted_label'], labels=labels)
-                report = classification_report(df_temp['label'], df_temp['predicted_label'], labels=labels)
+                report = classification_report(df_temp['label'], df_temp['predicted_label'], labels=labels, zero_division=nan)
                 df_aux = get_df_from_report(report)    
                 df_aux['model'] = model 
                 df_aux['strategy'] = strategy     
@@ -210,6 +210,7 @@ def get_rq3_promise_result(labels, models ):
 def main():
     labels = ['sec', 'nonsec']
     models = ['gemma', 'gemma2_27b', 'gpt-4o-mini', 'llama3', 'llama3.1', 'llama3.2-vision', 'mistral', 'mistral-nemo', 'mistral-small']
+    # models = ['mistral-nemo_extra_datasets'] - Uncomment this line and comment the previous one to get the reports from the extra datasets
 
     df_rq1 = get_rq1_consolidated_result(labels, models)
     print("Head of df_rq1:")
