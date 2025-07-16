@@ -1,5 +1,7 @@
 # Evaluating the Potential of Large Language Models in Security-Related Software Requirements Classification
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16001527.svg)](https://doi.org/10.5281/zenodo.16001527)
+
 This project contains the replication package for the paper "Evaluating the Potential of Large Language Models in Security-Related Software Requirements Classification".
 
 This paper explores the effectiveness of Large Language Models (LLMs) in classifying security-related software requirements. Utilizing the SecReq, DOSSPRE, and PROMISE+ datasets.
