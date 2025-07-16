@@ -89,4 +89,9 @@ To add new prompts:
 1. Add the template to the prompt factory in `source/prompt.py`.
 2. Update the `strategies` list at the end of the file.
 
----
+## License
+This project is licensed under the MIT License.
+Feel free to use, modify, and distribute it as permitted under the terms of this license.
+
+This license is not applicable to the files available in the datasets folder, as they are replicated from other works (see the paper for their sources). 
+These datasets were included in this repository for preservation purposes, and to allow this replication package to be self-contained in terms of inputs.
