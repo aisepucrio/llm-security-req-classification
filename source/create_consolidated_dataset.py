@@ -59,7 +59,7 @@ def treat_dosspre(consolidated_data):
 
 
 def treat_promise_plus(consolidated_data):
-    path = r'./DataSets/Promise+/PROMISE+.arff'
+    path = r'./DataSets/Promise+/Promise+.arff'
     encoding = get_file_encoding(path)
     with open(path, 'r', encoding=encoding) as file:
         lines = file.readlines()
@@ -68,7 +68,7 @@ def treat_promise_plus(consolidated_data):
             if data:
                 output = line.split("'")
                 label = 'sec' if output[-1].strip().endswith('SE') else 'nonsec'
-                consolidated_data.append({'project_id': 105 + int(output[0].strip(",")), 'requirement': output[1], 'label':label, 'source': 'promise_exp'})
+                consolidated_data.append({'project_id': 105 + int(output[0].strip(",")), 'requirement': output[1], 'label':label, 'source': 'promise_plus'})
             if '@DATA' in line:
                 data = True
     return consolidated_data

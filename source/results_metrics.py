@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from sklearn.metrics import confusion_matrix, classification_report
 import pandas as pd
 import os
@@ -5,14 +7,14 @@ import json
 import matplotlib.pyplot as plt
 import seaborn as sns
 from prompt import strategys
-from data_analysis import rq1_eda, rq2_eda, rq2_best_improvement, rq2_improvement_by_strategy, rq3_individual,rq3_consolidated
+from data_analysis import rq1_eda, rq2_eda, rq2_best_improvement, rq2_improvement_by_strategy, rq3_individual,rq3_consolidated, rq2_statistical_test
 from numpy import nan
 
 
 def get_data(models):
     consolidated_df = pd.DataFrame()
     for model in models:
-        path = rf'./results/{model}.json'
+        path = rf'./results/{model}_consolidated.json'
         with open(path, encoding='utf-8') as f:
             data = json.load(f)
         df = pd.DataFrame(data)
@@ -52,7 +54,7 @@ def get_df_from_report(report):
         row['precision'] = float(row_data[1])
         row['recall'] = float(row_data[2])
         row['f1_score'] = float(row_data[3])
-        row['support'] = int(row_data[4])
+        row['support'] = int(Decimal(row_data[4]))
         report_data.append(row)
 
     return pd.DataFrame.from_dict(report_data)
@@ -112,11 +114,11 @@ def get_rq2_consolidated_result(labels, models ):
         file.write(report_text)
     return consolidated_results_df
 
-def get_rq3_individual_secreq_result(labels, models ):
+def get_rq3_individual_secreq_result(labels, models):
     project_dict = {
-        50: "CPN",
-        51: "ePurse",
-        52: "GPS"
+        1: "CPN",
+        2: "ePurse",
+        3: "GPS"
     }
     df = get_data(models)
     report_text = ''
@@ -125,8 +127,9 @@ def get_rq3_individual_secreq_result(labels, models ):
         if (strategy == 'zero_shot'):
             continue
         for model in models:
-            for projectId in [50,51,52]:
-                df_temp = filter_by_model(model, df).copy() 
+            for projectId in [1,2,3]:
+                df_temp = filter_by_model(model, df).copy()
+                df_temp['project_id'] = df_temp['project_id'].astype(int)
                 df_temp = filter_by_project_id(projectId, df_temp).copy()
                 df_temp['predicted_label'] = df_temp[strategy]
                 df_temp = df_temp[df_temp['predicted_label'].isin(labels)]
@@ -157,8 +160,9 @@ def get_rq3_consolidated_secreq_result(labels, models ):
         if (strategy == 'zero_shot'):
             continue
         for model in models:
-            df_temp = filter_by_model(model, df).copy() 
-            df_temp = filter_by_project_id([50,51,52], df_temp).copy()
+            df_temp = filter_by_model(model, df).copy()
+            df_temp['project_id'] = df_temp['project_id'].astype(int)
+            df_temp = filter_by_project_id([1,2,3], df_temp).copy()
             df_temp['predicted_label'] = df_temp[strategy]
             df_temp = df_temp[df_temp['predicted_label'].isin(labels)]
             df_temp = df_temp.drop(columns=strategys)
@@ -209,24 +213,26 @@ def get_rq3_promise_result(labels, models ):
 
 def main():
     labels = ['sec', 'nonsec']
-    models = ['gemma', 'gemma2_27b', 'gpt-4o-mini', 'llama3', 'llama3.1', 'llama3.2-vision', 'mistral', 'mistral-nemo', 'mistral-small']
-    # models = ['mistral-nemo_extra_datasets'] - Uncomment this line and comment the previous one to get the reports from the extra datasets
+    models = ['gemma', 'gemma2_27b', 'llama3', 'llama3.1', 'llama3.2-vision', 'mistral', 'mistral-nemo', 'mistral-small', 'deepseek-r1_14b', 'gpt-4o-mini']
 
     df_rq1 = get_rq1_consolidated_result(labels, models)
     print("Head of df_rq1:")
-    print(df_rq1.head(10))
+    print(df_rq1[df_rq1["class"] == "sec"].head(100))
 
     df_rq2 = get_rq2_consolidated_result(labels, models)
     print("\nHead of df_rq2:")
-    print(df_rq2.head(10))
+    print(df_rq2[df_rq2["class"] == "sec"].drop(columns=["support", "class"]).head(100))
 
-    df_rq3_individual_sec_req = get_rq3_individual_secreq_result(labels, models)
-    print("\nHead of df_rq3_individual_sec_req:")
-    print(df_rq3_individual_sec_req.head(10))
+    rq2_statistical_test(df_rq2)
 
-    df_rq3_consolidated_sec_req = get_rq3_consolidated_secreq_result(labels, models)
-    print("\nHead of df_rq3_consolidated_sec_req:")
-    print(df_rq3_consolidated_sec_req.head(10))
+    #df_rq3_individual_sec_req = get_rq3_individual_secreq_result(labels, models)
+    #print("\nHead of df_rq3_individual_sec_req:")
+    #print(df_rq3_individual_sec_req[(df_rq3_individual_sec_req["class"] == "sec") & (df_rq3_individual_sec_req["model"] == "deepseek-r1_14b")].head(100))
+
+    #df_rq3_consolidated_sec_req = get_rq3_consolidated_secreq_result(labels, models)
+    #print("\nHead of df_rq3_consolidated_sec_req:")
+    #print(df_rq3_consolidated_sec_req[df_rq3_consolidated_sec_req['class'] == "sec"].sort_values(by="f1_score", ascending=False).drop(columns=["support", "class"]).head(100))
+
     #rq1_eda(df_rq1)
     #df_rq3_promise = get_rq3_promise_result(labels, models)
     #rq2_eda(df_rq2)

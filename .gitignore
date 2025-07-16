@@ -1,0 +1,12 @@
+.DS_Store
+.venv
+.idea
+*.pyc
+__pycache__
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.egg
+*.egg-info

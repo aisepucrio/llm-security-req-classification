@@ -1,5 +1,7 @@
 import pandas as pd
 from prompt import strategys
+from scipy.stats import mannwhitneyu
+import itertools
 
 def rq1_eda(df: pd.DataFrame):
     df = df[df['class'] == 'sec']
@@ -63,7 +65,71 @@ def rq2_best_improvement(df_1,df_2):
     latex_diff_sec = diff_sec.to_latex(index=False, caption="Most improved f1-score for class 'sec'",label="tab:sec_improv", float_format="%.2f", na_rep="NA")
 
     
-    
+def rq2_statistical_test(df_2):
+    # Filter for 'sec' class only
+    df_sec = df_2[df_2['class'] == 'sec'].copy()
+
+    # Convert f1_score to float
+    df_sec['f1_score'] = df_sec['f1_score'].astype(float)
+
+    # Get the three strategy groups
+    strategies = ['few_shot', 'zero_shot_cot', 'raw_inst']
+
+    # Extract f1_scores for each strategy
+    strategy_data = {}
+    for strategy in strategies:
+        strategy_data[strategy] = df_sec[df_sec['strategy'] == strategy]['f1_score'].values
+
+    # Perform pairwise Mann-Whitney U tests
+    results = []
+
+    for strategy1, strategy2 in itertools.combinations(strategies, 2):
+        group1 = strategy_data[strategy1]
+        group2 = strategy_data[strategy2]
+
+        # Perform Mann-Whitney U test
+        statistic, p_value = mannwhitneyu(group1, group2, alternative='two-sided')
+
+        # Calculate effect size (rank-biserial correlation)
+        n1, n2 = len(group1), len(group2)
+        effect_size = 1 - (2 * statistic) / (n1 * n2)
+
+        results.append({
+            'Group 1': strategy1,
+            'Group 2': strategy2,
+            'U-statistic': statistic,
+            'p-value': p_value,
+            'Effect Size (r)': effect_size,
+            'Significant (α=0.05)': 'Yes' if p_value < 0.05 else 'No'
+        })
+
+    # Create results DataFrame
+    results_df = pd.DataFrame(results)
+
+    # Create LaTeX table
+    latex_table = results_df.to_latex(
+        index=False,
+        caption="Mann-Whitney U Test results comparing f1-scores between strategy groups",
+        label="tab:mannwhitney_results",
+        float_format="%.4f"
+    )
+
+    # Print summary statistics for each group
+    print("Descriptive Statistics by Strategy:")
+    print("=" * 50)
+    for strategy in strategies:
+        data = strategy_data[strategy]
+        print(f"\n{strategy}:")
+        print(f"  N: {len(data)}")
+        print(f"  Mean: {data.mean():.4f}")
+        print(f"  Median: {pd.Series(data).median():.4f}")
+        print(f"  Std: {data.std():.4f}")
+
+    print("\nMann-Whitney U Test Results:")
+    print("=" * 50)
+    print(results_df.to_string(index=False, float_format='%.4f'))
+
+    return results_df
 
 
 def rq2_improvement_by_strategy(df_1,df_2):
@@ -120,8 +186,9 @@ def rq2_improvement_by_strategy(df_1,df_2):
     df_with_averages = pd.concat(dfs_with_averages)
     df_with_averages = df_with_averages.reorder_levels(['strategy', 'model']).sort_index(level='strategy', key=lambda x: x.astype(strategy_order))
 
-
     latex_df = df_with_averages.to_latex(index=True, caption="Difference in accuracy by strategy compared to the baseline approach",label="tab:accuracyDiff", float_format="%.2f", na_rep="NA")
+
+    print(latex_df)
 
 def rq3_individual(df):
     df_orig = df.copy()
@@ -144,4 +211,4 @@ def rq3_consolidated(df):
     
 def format_number(number):
     signal = '+' if number >= 0 else '-'
-    return f"{signal}{abs(number):.2f}" 
+    return f"{signal}{abs(number):.2f}"
