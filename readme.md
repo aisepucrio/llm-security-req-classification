@@ -17,6 +17,7 @@ The pre-print for the paper is available [here](paper/LLMSecReq_2025.pdf).
 
 - Python 3.12 (may work on other versions, but your mileage may vary)
 - Ollama (for running local models, see Model Configuration for more details on installation)
+   - Note that ollama requires a modern CPU (4+ cores, preferably with AVX512 support), a sizeable amount of RAM (at least 32GB to confortably run the models we have used), at least 20-100 GBs of free disk space, and preferably (but optional) a modern GPU with at least 12GBs of VRAM (for reasonable performance, but 8GB GPUs should work aswell).
 - An OpenAI API Key (paid, for running GPT models)
 
 ### Model configuration
