@@ -1,5 +1,7 @@
 # Evaluating the Potential of Large Language Models in Security-Related Software Requirements Classification
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16001526.svg)](https://doi.org/10.5281/zenodo.16001526)
+
 This project contains the replication package for the paper "Evaluating the Potential of Large Language Models in Security-Related Software Requirements Classification".
 
 This paper explores the effectiveness of Large Language Models (LLMs) in classifying security-related software requirements. Utilizing the SecReq, DOSSPRE, and PROMISE+ datasets.
@@ -104,4 +106,11 @@ This section details how the `source/results_metrics.py` script and its function
 - `get_rq3_consolidated_secreq_result(labels, models)`: This functions generates the consolidated metrics for the SecReq dataset. This data would be used to create **Table 6**, which shows the top-5 performing models and strategies specifically for this dataset.
 
 - `get_rq3_individual_secreq_result(labels, models)`: This function is intended to be part of the analysis for RQ3. Uncomment it to calculate the metrics for each individual SecReq project (CPN, ePurse, and GP), providing the data for the detailed comparative analysis in **Table 7**.
----
+
+
+## License
+This project is licensed under the MIT License.
+Feel free to use, modify, and distribute it as permitted under the terms of this license.
+
+This license is not applicable to the files available in the datasets folder, as they are replicated from other works (see the paper for their sources). 
+These datasets were included in this repository for preservation purposes, and to allow this replication package to be self-contained in terms of inputs.
