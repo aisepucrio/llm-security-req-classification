@@ -89,4 +89,19 @@ To add new prompts:
 1. Add the template to the prompt factory in `source/prompt.py`.
 2. Update the `strategies` list at the end of the file.
 
+## Paper to Script Mapping
+
+This section details how the `source/results_metrics.py` script and its functions relate to the tables in the paper.
+
+- `get_rq1_consolidated_result(labels, models)`: This function is used for RQ1. It processes the results from the models using the zero-shot prompting strategy and calculates the precision, recall, and F1-score metrics. The data this function generates is the basis for the "Zero-shot" section of **Table 3**.
+
+- `get_rq2_consolidated_result(labels, models)`: This function is used in RQ2. It performs the same metric calculations as get_rq1_consolidated_result but for the other prompting strategies: Few-shot, Auto-CoT, and Raw-inst. The data from this function populates the corresponding sections of **Table 3**.
+
+- The main function also contains commented-out calls to several functions from the `source/data_analysis.py` script, such as `rq1_eda(df_rq1)` and `rq2_improvement_by_strategy(df_rq1,df_rq2)`. They generate the data for the remaining tables, specifically a more detailed version of **Table 3** and **Table 4**, respectively.
+
+- `rq2_statistical_test(df_rq2)`: This function performs the statistical analysis for RQ2. Although this is a function from data_analysis.py, its call here in results_metrics.py is what triggers the creation of the data for **Table 5**.
+
+- `get_rq3_consolidated_secreq_result(labels, models)`: This functions generates the consolidated metrics for the SecReq dataset. This data would be used to create **Table 6**, which shows the top-5 performing models and strategies specifically for this dataset.
+
+- `get_rq3_individual_secreq_result(labels, models)`: This function is intended to be part of the analysis for RQ3. Uncomment it to calculate the metrics for each individual SecReq project (CPN, ePurse, and GP), providing the data for the detailed comparative analysis in **Table 7**.
 ---
